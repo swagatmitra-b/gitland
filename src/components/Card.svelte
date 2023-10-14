@@ -133,6 +133,9 @@
     font-size: 1.7rem;
     font-weight: bold;
   }
+  span {
+    margin-top: 0.5rem;
+  }
 
   .notfound h2 {
     font-size: 1.5rem;
