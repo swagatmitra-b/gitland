@@ -57,7 +57,7 @@
           src={fetched.avatar_url}
           alt="avatar"
           class="{loading ? 'blur': ''}"
-          on:load={() => loading == false}
+          on:load={() => loading = false}
         />
       </div>
       <div class="rest">
