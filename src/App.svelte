@@ -17,6 +17,7 @@
 
 <style>
   .container {
+    margin-top: -1.3rem;
     display: flex;
     min-height: 100vh;
     justify-content: center;

@@ -136,6 +136,7 @@
 
   .notfound h2 {
     font-size: 1.5rem;
+    font-weight: bold;
   }
 
   @media screen and (max-width: 414px) {
