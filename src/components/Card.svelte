@@ -16,7 +16,8 @@
   }
 
   let fetched: CardData | null = null;
-  let notFound: boolean = false;
+  let notFound = false;
+  let loading = true;
 
   const unsub: Unsubscriber = GithubData.subscribe((data) => {
     if (data) {
@@ -47,15 +48,25 @@
 </script>
 
 {#if fetched}
-  <h2 id="name">{fetched.name == null ? '' : fetched.name}</h2>
+  <h2 id="name">{fetched.name == null ? "" : fetched.name}</h2>
   <div class="card" transition:fade={{ duration: 250, delay: 100 }}>
     <div class="inner">
       <div class="image">
-        <img loading="lazy" src={fetched.avatar_url} alt="avatar" />
+        <img
+          loading="lazy"
+          src={fetched.avatar_url}
+          alt="avatar"
+          class="{loading ? 'blur': ''}"
+          on:load={() => loading == false}
+        />
       </div>
       <div class="rest">
         <h2>Username: {fetched.login}</h2>
-        <h2>Location: {fetched.location == null ? 'Not available' : fetched.location}</h2>
+        <h2>
+          Location: {fetched.location == null
+            ? "Not available"
+            : fetched.location}
+        </h2>
         <h2>
           Github Profile: <a href={fetched.html_url} target="_blank">Link</a>
         </h2>
@@ -140,6 +151,10 @@
   .notfound h2 {
     font-size: 1.5rem;
     font-weight: bold;
+  }
+
+  .blur {
+    filter: blur(0.7rem);
   }
 
   @media screen and (max-width: 414px) {
