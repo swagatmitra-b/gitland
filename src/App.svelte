@@ -1,7 +1,7 @@
 <script lang="ts">
   import "./app.css";
-  import Search from "./Search.svelte";
-  import Card from "./Card.svelte";
+  import Search from "./components/Search.svelte";
+  import Card from "./components/Card.svelte";
 </script>
 
 <div class="container">

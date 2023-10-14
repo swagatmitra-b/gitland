@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import GithubData from "./stores/Store";
+  import GithubData from "../stores/Store";
   import type { Unsubscriber } from "svelte/motion";
   import { fade } from "svelte/transition";
 

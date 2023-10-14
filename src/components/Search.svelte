@@ -1,5 +1,5 @@
 <script lang="ts">
-  import GithubData from "./stores/Store";
+  import GithubData from "../stores/Store";
   let username = "";
 
   const getInfo = () => {
