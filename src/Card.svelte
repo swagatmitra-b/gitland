@@ -36,14 +36,18 @@
   });
 
   function isoToLocalString(isoString: string) {
-    const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
     const date = new Date(isoString);
     return date.toLocaleDateString("en-US", options);
   }
 </script>
 
 {#if fetched}
-  <h2 id="name">{fetched.name}</h2>
+  <h2 id="name">{fetched.name == null ? '' : fetched.name}</h2>
   <div class="card" transition:fade={{ duration: 250, delay: 100 }}>
     <div class="inner">
       <div class="image">
@@ -51,9 +55,11 @@
       </div>
       <div class="rest">
         <h2>Username: {fetched.login}</h2>
-        <h2>Location: {fetched.location == null ? "not available" : null}</h2>
-        <h2>Github Profile: <a href={fetched.html_url}>Link</a></h2>
-        <h2>Bio: {fetched.bio == null ? "none" : null}</h2>
+        <h2>Location: {fetched.location == null ? 'Not available' : fetched.location}</h2>
+        <h2>
+          Github Profile: <a href={fetched.html_url} target="_blank">Link</a>
+        </h2>
+        <h2>Bio: {fetched.bio == null ? "None" : fetched.bio}</h2>
         <h2>Created At: {isoToLocalString(fetched.created_at)}</h2>
         <h2>Last Updated: {isoToLocalString(fetched.updated_at)}</h2>
         <div class="stats">
@@ -73,7 +79,7 @@
 {/if}
 <div class="notfound">
   {#if notFound}
-    <h2>User not found</h2>
+    <h2>User not found :(</h2>
   {/if}
 </div>
 
@@ -126,6 +132,10 @@
   #name {
     font-size: 1.7rem;
     font-weight: bold;
+  }
+
+  .notfound h2 {
+    font-size: 1.5rem;
   }
 
   @media screen and (max-width: 414px) {
