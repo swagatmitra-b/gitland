@@ -55,7 +55,7 @@
     on:keypress={(e) => onEnter(e)}
     placeholder={target == "users" ? "search users" : "search repositories"}
   />
-  <button on:click={getInfo} class="">SEARCH</button>
+  <button on:click={getInfo} class="">Search</button>
   <select on:change={changeMode}>
     <option value="repositories">repositories</option>
     <option value="users">users</option>
