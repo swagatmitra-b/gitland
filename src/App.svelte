@@ -1,7 +1,32 @@
 <script lang="ts">
   import "./app.css";
   import Search from "./components/Search.svelte";
-  import Card from "./components/Card.svelte";
+  import RCards from "./components/RCards.svelte";
+  import PCard from "./components/PCard.svelte";
+  import { Mode } from "./stores/Store";
+  import { fade } from "svelte/transition";
+
+  interface savedRepo {
+    name: string;
+    url: string;
+    description: string;
+    avatar: string;
+    language: string;
+  }
+
+  let mode: string;
+  let savedRepos: savedRepo[];
+  Mode.subscribe((currentMode) => (mode = currentMode));
+
+  const withdraw = localStorage.getItem("repos");
+  savedRepos = withdraw ? JSON.parse(withdraw) : [];
+
+  const removeRepo = (name: string) => {
+    const i = savedRepos.findIndex((repo) => repo.name == name);
+    savedRepos.splice(i, 1);
+    savedRepos = savedRepos;
+    localStorage.setItem("repos", JSON.stringify(savedRepos));
+  };
 </script>
 
 <div class="main">
@@ -13,16 +38,40 @@
     >
     <h1>Github Search</h1>
     <Search />
-    <Card />
+    {#if mode == "users"}
+      <PCard />
+    {:else}
+      <RCards />
+    {/if}
+    {#if mode == "repositories"}
+      <div class="repos">
+        {#each savedRepos as repo, i (i)}
+          <div class="card" transition:fade={{ duration: 250, delay: 100 }}>
+            <div class="head">
+              <a href={repo.url}>{repo.name}</a>
+              <img loading="lazy" src={repo.avatar} alt="avatar" />
+            </div>
+            <div class="">
+              <h5>
+                {repo.description
+                  ? repo.description.slice(0, 100)
+                  : "No description"}
+              </h5>
+              <h5>
+                {repo.language}
+              </h5>
+            </div>
+            <button on:click={() => removeRepo(repo.name)}>Remove</button>
+          </div>
+        {/each}
+      </div>
+    {/if}
   </div>
-  <h2 class="credit">
-    created by <a href="https://github.com/swagatmitra-b">swagat</a>
-  </h2>
 </div>
 
 <style>
   .container {
-    margin-top: -1.3rem;
+    margin-top: 1.5rem;
     display: flex;
     min-height: 100vh;
     justify-content: center;
@@ -33,19 +82,44 @@
     font-family: "Young Serif";
     font-weight: 400;
   }
-
   .main {
     position: relative;
   }
-
-  .credit {
-    font-style: italic;
-    font-size: 1.2rem;
-    position: absolute;
-    bottom: 0;
-    right: 0;
+  .repos {
+    font-family: "Roboto";
+    margin: 3rem;
+    display: grid;
+    padding: 0rem 2rem;
+    max-width: 100%;
+    grid-template-columns: repeat(5, 16rem);
+    gap: 1rem;
   }
-  
+  img {
+    width: 8rem;
+    height: 8rem;
+    border-radius: 0.8rem;
+    margin-top: 0.5rem;
+  }
+  .head {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .card {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: aliceblue;
+    padding: 1.4rem;
+    border-radius: 2rem;
+    border: 2px solid black;
+  }
+  button {
+    padding: 0.5rem 1rem;
+    border-radius: 7px;
+    cursor: pointer;
+  }
   @media screen and (max-width: 414px) {
     .container {
       margin-top: 1rem;

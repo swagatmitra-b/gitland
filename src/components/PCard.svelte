@@ -1,33 +1,26 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import GithubData from "../stores/Store";
+  import { GithubData } from "../stores/Store";
   import type { Unsubscriber } from "svelte/motion";
   import { fade } from "svelte/transition";
+  import { type CardData, type RepoData } from "../lib/types";
+  import PrCards from "./PRCards.svelte";
 
-  interface CardData {
-    [key: string]: string | number;
-    created_at: string;
-    updated_at: string;
-    html_url: string;
-    avatar_url: string;
-    followers: number;
-    following: number;
-    public_repos: number;
-  }
-
-  let fetched: CardData | null = null;
+  let userData: CardData | null = null;
+  let repoData: RepoData[] | null = null;
   let notFound = false;
   let loading = true;
 
   const unsub: Unsubscriber = GithubData.subscribe((data) => {
     if (data) {
-      let parsed = JSON.parse(data);
-      if (!parsed.message) {
+      let [user, repo] = JSON.parse(data);
+      if (!user.message) {
         notFound = false;
-        fetched = parsed;
+        userData = user;
+        repoData = repo;
         return;
       }
-      fetched = null;
+      userData = null;
       notFound = true;
     }
   });
@@ -47,46 +40,47 @@
   }
 </script>
 
-{#if fetched}
-  <h2 id="name">{fetched.name == null ? "" : fetched.name}</h2>
+{#if userData && repoData}
+  <h2 id="name">{userData.name == null ? "" : userData.name}</h2>
   <div class="card" transition:fade={{ duration: 250, delay: 100 }}>
     <div class="inner">
       <div class="image">
         <img
           loading="lazy"
-          src={fetched.avatar_url}
+          src={userData.avatar_url}
           alt="avatar"
-          class="{loading ? 'blur': ''}"
-          on:load={() => loading = false}
+          class={loading ? "blur" : ""}
+          on:load={() => (loading = false)}
         />
       </div>
       <div class="rest">
-        <h2>Username: {fetched.login}</h2>
+        <h2>Username: {userData.login}</h2>
         <h2>
-          Location: {fetched.location == null
+          Location: {userData.location == null
             ? "Not available"
-            : fetched.location}
+            : userData.location}
         </h2>
         <h2>
-          Github Profile: <a href={fetched.html_url} target="_blank">Link</a>
+          Github Profile: <a href={userData.html_url} target="_blank">Link</a>
         </h2>
-        <h2>Bio: {fetched.bio == null ? "None" : fetched.bio}</h2>
-        <h2>Created At: {isoToLocalString(fetched.created_at)}</h2>
-        <h2>Last Updated: {isoToLocalString(fetched.updated_at)}</h2>
+        <h2>Bio: {userData.bio == null ? "None" : userData.bio}</h2>
+        <h2>Created At: {isoToLocalString(userData.created_at)}</h2>
+        <h2>Last Updated: {isoToLocalString(userData.updated_at)}</h2>
         <div class="stats">
           <h2>
-            Public Repos <span>{fetched.public_repos}</span>
+            Public Repos <span>{userData.public_repos}</span>
           </h2>
           <h2>
-            Followers<span>{fetched.followers}</span>
+            Followers<span>{userData.followers}</span>
           </h2>
           <h2>
-            Following <span>{fetched.following}</span>
+            Following <span>{userData.following}</span>
           </h2>
         </div>
       </div>
     </div>
   </div>
+  <PrCards repoData={repoData}/>
 {/if}
 <div class="notfound">
   {#if notFound}
