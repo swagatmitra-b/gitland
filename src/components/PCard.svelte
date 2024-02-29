@@ -80,7 +80,9 @@
       </div>
     </div>
   </div>
-  <PrCards repoData={repoData}/>
+  <PrCards
+    repoData={repoData.sort((a, b) => b.stargazers_count - a.stargazers_count)}
+  />
 {/if}
 <div class="notfound">
   {#if notFound}

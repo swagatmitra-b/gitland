@@ -64,7 +64,7 @@
     {#each fetched as repo (repo.id)}
       <div class="card" transition:fade={{ duration: 250, delay: 100 }}>
         <div class="head">
-          <a href={repo.svn_url}>{repo.full_name}</a>
+          <a href={repo.svn_url} target="_blank">{repo.full_name}</a>
           <img
             loading="lazy"
             src={repo.owner.avatar_url}
@@ -76,7 +76,7 @@
         <div class="">
           <h5>
             {repo.description
-              ? repo.description.slice(0, 100)
+              ? repo.description.slice(0, 150)
               : "No description"}
           </h5>
           <h5>

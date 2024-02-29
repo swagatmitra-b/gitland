@@ -48,7 +48,7 @@
         {#each savedRepos as repo, i (i)}
           <div class="card" transition:fade={{ duration: 250, delay: 100 }}>
             <div class="head">
-              <a href={repo.url}>{repo.name}</a>
+              <a href={repo.url} target="_blank">{repo.name}</a>
               <img loading="lazy" src={repo.avatar} alt="avatar" />
             </div>
             <div class="">
@@ -58,7 +58,7 @@
                   : "No description"}
               </h5>
               <h5>
-                {repo.language}
+                {repo.language == null ? "Github Markdown" : repo.language}
               </h5>
             </div>
             <button on:click={() => removeRepo(repo.name)}>Remove</button>

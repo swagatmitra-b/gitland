@@ -3,7 +3,7 @@
   import { fade } from "svelte/transition";
   import { type RepoData, type savedRepo } from "../lib/types";
 
-  export let repoData: RepoData[]; 
+  export let repoData: RepoData[];
 
   function isoToLocalString(isoString: string) {
     const options: Intl.DateTimeFormatOptions = {
@@ -43,17 +43,13 @@
     {#each repoData as repo (repo.id)}
       <div class="card" transition:fade={{ duration: 250, delay: 100 }}>
         <div class="head">
-          <a href={repo.svn_url}>{repo.full_name}</a>
-          <img
-            loading="lazy"
-            src={repo.owner.avatar_url}
-            alt="avatar"
-          />
+          <a href={repo.svn_url} target="_blank">{repo.full_name}</a>
+          <img loading="lazy" src={repo.owner.avatar_url} alt="avatar" />
         </div>
         <div class="">
           <h5>
             {repo.description
-              ? repo.description.slice(0, 100)
+              ? repo.description.slice(0, 150)
               : "No description"}
           </h5>
           <h5>
