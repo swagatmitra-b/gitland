@@ -116,7 +116,7 @@
   .stats {
     display: flex;
     gap: 1.5rem;
-    justify-content: space-around;
+    justify-content: center;
   }
   .inner {
     gap: 2rem;
@@ -154,8 +154,9 @@
   }
 
   @media screen and (max-width: 414px) {
+    img,
     .card {
-      width: 20rem;
+      width: 19rem;
     }
     .inner {
       flex-direction: column;

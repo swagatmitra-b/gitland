@@ -55,17 +55,24 @@
     on:keypress={(e) => onEnter(e)}
     placeholder={target == "users" ? "search users" : "search repositories"}
   />
-  <button on:click={getInfo} class="">Search</button>
-  <select on:change={changeMode}>
-    <option value="repositories">repositories</option>
-    <option value="users">users</option>
-  </select>
+  <div class="buttons">
+    <button on:click={getInfo} class="">Search</button>
+    <select on:change={changeMode}>
+      <option value="repositories">repositories</option>
+      <option value="users">users</option>
+    </select>
+  </div>
 </div>
 
 <style>
   .search {
     display: flex;
     gap: 1.2rem;
+  }
+  .buttons {
+    display: flex;
+    gap: 0.7rem;
+    justify-content: center;
   }
   input {
     width: 20rem;
@@ -97,8 +104,9 @@
   }
 
   @media screen and (max-width: 414px) {
-    input {
-      width: 14rem;
+    .search {
+      display: flex;
+      flex-direction: column;
     }
   }
 </style>

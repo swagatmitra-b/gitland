@@ -132,6 +132,7 @@
     flex-direction: column;
     background-color: aliceblue;
     padding: 1.4rem;
+    width: 15.5rem;
     border-radius: 2rem;
     border: 2px solid black;
   }
@@ -150,5 +151,12 @@
     padding: 0.5rem 1rem;
     border-radius: 7px;
     cursor: pointer;
+  }
+
+  @media screen and (max-width: 414px) {
+    .repos {
+      display: flex;
+      flex-direction: column;
+    }
   }
 </style>
