@@ -15,7 +15,7 @@
   let notFound = false;
   let loading = true;
 
-  $: storedData = localStorage.getItem("profiles");
+  const storedData = localStorage.getItem("profiles");
 
   let saves: savedProfile[] = storedData ? JSON.parse(storedData) : [];
 
