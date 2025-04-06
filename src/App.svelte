@@ -5,27 +5,31 @@
   import PCard from "./components/PCard.svelte";
   import { Mode } from "./stores/Store";
   import { fade } from "svelte/transition";
-
-  interface savedRepo {
-    name: string;
-    url: string;
-    description: string;
-    avatar: string;
-    language: string;
-  }
+  import type { savedProfile, savedRepo } from "./lib/types";
 
   let mode: string;
   let savedRepos: savedRepo[];
+  let savedProfiles: savedProfile[];
   Mode.subscribe((currentMode) => (mode = currentMode));
 
-  const withdraw = localStorage.getItem("repos");
-  savedRepos = withdraw ? JSON.parse(withdraw) : [];
+  const repos = localStorage.getItem("repos");
+  const profiles = localStorage.getItem("profiles");
 
-  const removeRepo = (name: string) => {
-    const i = savedRepos.findIndex((repo) => repo.name == name);
-    savedRepos.splice(i, 1);
-    savedRepos = savedRepos;
-    localStorage.setItem("repos", JSON.stringify(savedRepos));
+  savedRepos = repos ? JSON.parse(repos) : [];
+  savedProfiles = profiles ? JSON.parse(profiles) : [];
+
+  const remove = (name: string, type: string) => {
+    if (type == "repo") {
+      const i = savedRepos.findIndex((repo) => repo.name == name);
+      savedRepos.splice(i, 1);
+      savedRepos = savedRepos;
+      localStorage.setItem("repos", JSON.stringify(savedRepos));
+    } else {
+      const i = savedProfiles.findIndex((profile) => profile.name == name);
+      savedProfiles.splice(i, 1);
+      savedProfiles = savedProfiles;
+      localStorage.setItem("profiles", JSON.stringify(savedProfiles));
+    }
   };
 </script>
 
@@ -40,11 +44,27 @@
     <Search />
     {#if mode == "users"}
       <PCard />
+      <div class="saved">
+        {#each savedProfiles as profile, i (i)}
+          <div class="card" transition:fade={{ duration: 250, delay: 100 }}>
+            <div class="head">
+              <a href={profile.url} target="_blank">{profile.name}</a>
+              <img loading="lazy" src={profile.avatar} alt="avatar" />
+            </div>
+            <div class="">
+              <h5>
+                {profile.bio ? profile.bio.slice(0, 100) : "No description"}
+              </h5>
+            </div>
+            <button on:click={() => remove(profile.name, "profile")}
+              >Remove</button
+            >
+          </div>
+        {/each}
+      </div>
     {:else}
       <RCards />
-    {/if}
-    {#if mode == "repositories"}
-      <div class="repos">
+      <div class="saved">
         {#each savedRepos as repo, i (i)}
           <div class="card" transition:fade={{ duration: 250, delay: 100 }}>
             <div class="head">
@@ -61,7 +81,7 @@
                 {repo.language == null ? "Github Markdown" : repo.language}
               </h5>
             </div>
-            <button on:click={() => removeRepo(repo.name)}>Remove</button>
+            <button on:click={() => remove(repo.name, "repo")}>Remove</button>
           </div>
         {/each}
       </div>
@@ -85,7 +105,7 @@
   .main {
     position: relative;
   }
-  .repos {
+  .saved {
     font-family: "Roboto";
     margin: 3rem;
     display: grid;

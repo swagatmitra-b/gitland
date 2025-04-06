@@ -15,7 +15,7 @@
     return date.toLocaleDateString("en-US", options);
   }
 
-  const storedData = localStorage.getItem("repos");
+  $: storedData = localStorage.getItem("repos");
 
   let saves: savedRepo[] = storedData ? JSON.parse(storedData) : [];
 

@@ -6,6 +6,13 @@ export interface savedRepo {
   language: string;
 }
 
+export interface savedProfile {
+  name: string;
+  url: string;
+  avatar: string;
+  bio: string;
+}
+
 export interface RepoData {
   id: number;
   full_name: string;

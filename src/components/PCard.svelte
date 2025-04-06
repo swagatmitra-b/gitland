@@ -3,13 +3,32 @@
   import { GithubData } from "../stores/Store";
   import type { Unsubscriber } from "svelte/motion";
   import { fade } from "svelte/transition";
-  import { type CardData, type RepoData } from "../lib/types";
+  import {
+    type CardData,
+    type RepoData,
+    type savedProfile,
+  } from "../lib/types";
   import PrCards from "./PRCards.svelte";
 
   let userData: CardData | null = null;
   let repoData: RepoData[] | null = null;
   let notFound = false;
   let loading = true;
+
+  $: storedData = localStorage.getItem("profiles");
+
+  let saves: savedProfile[] = storedData ? JSON.parse(storedData) : [];
+
+  function saveProfile(name: string, url: string, avatar: string, bio: string) {
+    saves.push({
+      name,
+      url,
+      avatar,
+      bio,
+    });
+    saves = saves;
+    localStorage.setItem("profiles", JSON.stringify(saves));
+  }
 
   const unsub: Unsubscriber = GithubData.subscribe((data) => {
     if (data) {
@@ -66,6 +85,18 @@
         <h2>Bio: {userData.bio == null ? "None" : userData.bio}</h2>
         <h2>Created At: {isoToLocalString(userData.created_at)}</h2>
         <h2>Last Updated: {isoToLocalString(userData.updated_at)}</h2>
+        <button
+          disabled={saves && saves.find((saved) => saved.name == userData.name)
+            ? true
+            : false}
+          on:click={() =>
+            saveProfile(
+              userData.name,
+              userData.html_url,
+              userData.avatar_url,
+              userData.bio
+            )}>Save</button
+        >
         <div class="stats">
           <h2>
             Public Repos <span>{userData.public_repos}</span>
@@ -151,6 +182,13 @@
 
   .blur {
     filter: blur(0.7rem);
+  }
+
+  button {
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 7px;
+    cursor: pointer;
   }
 
   @media screen and (max-width: 414px) {
