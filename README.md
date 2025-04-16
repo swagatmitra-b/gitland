@@ -1,1 +1,1 @@
-find and bookmark your favourite github repositories
+find and bookmark your favourite github people and repositories 
